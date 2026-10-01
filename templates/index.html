@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101b2e">
+  <title>Goldwatch — Market overview</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Main navigation">
+      <a class="brand" href="#overview" aria-label="Goldwatch home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 36 36" fill="none"><path d="M18 3.75 31 11.1v13.8L18 32.25 5 24.9V11.1L18 3.75Z" stroke="currentColor" stroke-width="1.7"/><path d="m11.2 21.8 4.3-5.1 3.4 3.2 6-7" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="25" cy="12.9" r="1.5" fill="currentColor"/></svg>
+        </span>
+        <span class="brand-name">goldwatch<span>.</span></span>
+      </a>
+
+      <div class="sidebar-label">WORKSPACE</div>
+      <nav class="nav-list">
+        <a class="nav-item active" href="#overview" aria-current="page">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="2.5" width="6" height="6" rx="1.5"/><rect x="11.5" y="2.5" width="6" height="6" rx="1.5"/><rect x="2.5" y="11.5" width="6" height="6" rx="1.5"/><rect x="11.5" y="11.5" width="6" height="6" rx="1.5"/></svg>
+          Overview
+        </a>
+        <a class="nav-item" href="#signal">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2.5 10h3l2.1-5 4 10 2.3-5h3.6"/></svg>
+          Trade setup
+        </a>
+        <a class="nav-item" href="#timeframes">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 16.5V10m4.7 6.5V4m4.6 12.5V7m4.7 9.5V2.8"/></svg>
+          Timeframes
+        </a>
+        <a class="nav-item" href="#risk">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2.5 17 5v4.8c0 3.7-2.5 6.1-7 7.7-4.5-1.6-7-4-7-7.7V5l7-2.5Z"/><path d="m7.3 10 1.8 1.8 3.8-4"/></svg>
+          Risk calculator
+        </a>
+      </nav>
+
+      <div class="sidebar-spacer"></div>
+      <div class="sidebar-note">
+        <span class="note-icon" aria-hidden="true">i</span>
+        <div><strong>Demo workspace</strong><p>Market figures are sample data, not live prices.</p></div>
+      </div>
+      <div class="sidebar-footer"><span class="footer-dot"></span> System ready <span class="footer-version">v1.0</span></div>
+    </aside>
+
+    <main id="overview" class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><span>Workspace</span><span class="breadcrumb-sep">/</span><strong>Overview</strong></div>
+        <div class="topbar-right">
+          <span class="demo-pill"><span></span> DEMO DATA</span>
+          <span class="topbar-divider" aria-hidden="true"></span>
+          <span class="updated-label">Updated <time id="last-updated">—</time></span>
+          <button class="icon-button" id="refresh-button" type="button" aria-label="Refresh dashboard" title="Refresh dashboard">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16.4 8A6.7 6.7 0 0 0 4.5 5.5L3 7m0 0V3.8M3 7h3.2M3.6 12a6.7 6.7 0 0 0 11.9 2.5L17 13m0 0v3.2M17 13h-3.2"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="page-wrap">
+        <section class="page-heading">
+          <div>
+            <div class="eyebrow"><span class="eyebrow-line"></span> MARKET WORKSPACE</div>
+            <h1>Gold market overview</h1>
+            <p class="page-subtitle">A clear view of the current setup, technical context, and trade risk.</p>
+          </div>
+          <div class="market-selector" aria-label="Selected market">
+            <span class="gold-token" aria-hidden="true">Au</span>
+            <span><strong>XAUUSD</strong><small>Gold / US Dollar</small></span>
+            <span class="selector-caret" aria-hidden="true">⌄</span>
+          </div>
+        </section>
+
+        <div id="load-error" class="inline-alert" role="status" hidden>Could not load the demo signal. Use refresh to try again.</div>
+
+        <section class="stat-grid" aria-label="Market summary">
+          <article class="stat-card price-stat">
+            <div class="stat-top"><span class="stat-label">CURRENT PRICE</span><span class="stat-icon gold-icon" aria-hidden="true">$</span></div>
+            <div class="stat-value" id="current-price">—</div>
+            <div class="stat-foot"><span class="market-symbol">XAUUSD</span><span class="sample-label">Sample quote</span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-label">MARKET BIAS</span><span class="stat-icon up-icon" aria-hidden="true">↗</span></div>
+            <div class="stat-value stat-green" id="market-direction">—</div>
+            <div class="stat-foot"><span class="signal-dot"></span><span id="market-status">Signal loading</span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-label">CONFIDENCE</span><span class="stat-icon confidence-icon" aria-hidden="true">◌</span></div>
+            <div class="stat-value"><span id="confidence-value">—</span><span class="value-suffix">%</span></div>
+            <div class="mini-meter"><span id="confidence-meter"></span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-label">RISK / REWARD</span><span class="stat-icon rr-icon" aria-hidden="true">↗</span></div>
+            <div class="stat-value" id="rr-ratio">—</div>
+            <div class="stat-foot"><span class="foot-muted">Setup target</span></div>
+          </article>
+        </section>
+
+        <div class="dashboard-grid">
+          <div class="primary-column">
+            <section id="signal" class="panel signal-panel">
+              <div class="panel-heading signal-heading">
+                <div><div class="panel-kicker">TODAY'S OPPORTUNITY</div><h2>Trade setup</h2></div>
+                <span class="confidence-badge"><span></span><span id="setup-status">—</span></span>
+              </div>
+              <div class="setup-overview">
+                <div class="direction-lockup"><span class="direction-arrow" aria-hidden="true">↗</span><span id="setup-direction">—</span></div>
+                <div class="entry-summary"><span class="field-label">ENTRY ZONE</span><strong id="entry-zone">—</strong></div>
+                <div class="setup-confidence"><span class="field-label">CONFIDENCE</span><strong><span id="setup-confidence-value">—</span><small>%</small></strong></div>
+              </div>
+              <div class="price-map-wrap">
+                <div class="price-map-caption"><span>SETUP PRICE LEVELS</span><span class="illustrative-note">Illustrative levels · not a live chart</span></div>
+                <div class="price-map" role="img" aria-label="Illustrative order of stop loss, current price, and take profit levels">
+                  <div class="price-track"><span class="track-segment loss-segment"></span><span class="track-segment gain-segment"></span></div>
+                  <div class="price-point stop-point"><span class="point-marker"></span><span class="point-label">STOP LOSS</span><strong id="stop-loss">—</strong></div>
+                  <div class="price-point current-point"><span class="point-marker"></span><span class="point-label">CURRENT</span><strong id="map-current">—</strong></div>
+                  <div class="price-point target-point"><span class="point-marker"></span><span class="point-label">TARGET 1</span><strong id="target-one">—</strong></div>
+                  <div class="price-point target-point target-two"><span class="point-marker"></span><span class="point-label">TARGET 2</span><strong id="target-two">—</strong></div>
+                </div>
+              </div>
+            </section>
+
+            <section id="timeframes" class="panel timeframe-panel">
+              <div class="panel-heading">
+                <div><div class="panel-kicker">TECHNICAL CONTEXT</div><h2>Timeframe confluence</h2></div>
+                <span class="panel-meta">4 timeframes</span>
+              </div>
+              <div class="table-scroll">
+                <table class="timeframe-table">
+                  <thead><tr><th scope="col">TIMEFRAME</th><th scope="col">TREND</th><th scope="col">RSI</th><th scope="col">MOMENTUM</th><th scope="col">EMA</th></tr></thead>
+                  <tbody id="timeframe-rows"><tr><td colspan="5" class="empty-row">Loading market context…</td></tr></tbody>
+                </table>
+              </div>
+              <div class="table-footnote"><span class="signal-dot"></span> Alignment across timeframes can add context; it does not guarantee a result.</div>
+            </section>
+          </div>
+
+          <div class="secondary-column">
+            <section id="risk" class="panel risk-panel">
+              <div class="panel-heading">
+                <div><div class="panel-kicker">POSITION PLANNING</div><h2>Risk calculator</h2></div>
+                <span class="risk-shield" aria-hidden="true">
+                  <svg viewBox="0 0 20 20"><path d="M10 2.5 17 5v4.8c0 3.7-2.5 6.1-7 7.7-4.5-1.6-7-4-7-7.7V5l7-2.5Z"/><path d="m7.3 10 1.8 1.8 3.8-4"/></svg>
+                </span>
+              </div>
+              <p class="panel-description">Estimate position size from your balance and stop distance.</p>
+              <form id="risk-form" class="risk-form">
+                <label class="form-field"><span>Account balance <small>USD</small></span><span class="input-wrap"><span>$</span><input name="balance" type="number" min="0.01" step="0.01" value="10000" inputmode="decimal" required></span></label>
+                <label class="form-field"><span>Risk per trade <small>%</small></span><span class="input-wrap"><input name="risk_pct" type="number" min="0.01" step="0.01" value="1" inputmode="decimal" required><span>%</span></span></label>
+                <label class="form-field"><span>Stop-loss distance <small>USD</small></span><span class="input-wrap"><input name="sl_points" type="number" min="0.01" step="0.01" value="8" inputmode="decimal" required><span>pts</span></span></label>
+                <button class="primary-button" id="calculate-button" type="submit">Calculate position size <span aria-hidden="true">→</span></button>
+              </form>
+              <div id="risk-result" class="risk-result" aria-live="polite">
+                <div class="result-topline"><span>RECOMMENDED LOT SIZE</span><span class="result-check" aria-hidden="true">✓</span></div>
+                <div class="result-main"><strong id="recommended-lot">—</strong><span>lots</span></div>
+                <div class="result-foot"><span>Risk amount</span><strong id="risk-amount">—</strong></div>
+              </div>
+              <p id="risk-error" class="form-error" role="alert" hidden></p>
+              <p class="risk-disclaimer">Estimate only. Confirm contract sizing with your broker.</p>
+            </section>
+
+            <section class="panel levels-panel">
+              <div class="panel-heading compact-heading"><div><div class="panel-kicker">REFERENCE POINTS</div><h2>Key levels</h2></div><span class="panel-meta">USD</span></div>
+              <div id="levels-list" class="levels-list"><div class="empty-level">Loading levels…</div></div>
+            </section>
+
+            <section class="panel reasons-panel">
+              <div class="panel-heading compact-heading"><div><div class="panel-kicker">SIGNAL RATIONALE</div><h2>What supports this view</h2></div></div>
+              <ul id="reasons-list" class="reasons-list"><li class="reason-placeholder">Loading signal details…</li></ul>
+            </section>
+          </div>
+        </div>
+        <footer class="page-footer"><span>Goldwatch workspace</span><span>Market data shown is illustrative demo content.</span></footer>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
+
